@@ -5,7 +5,7 @@ import arcade
 # -------------------- Settings --------------------
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Phaser Sample — Arcade 3.3.2 Port"
+SCREEN_TITLE = "PyPhaser"
 ASSETS = Path("src/pyphaser/resources")
 GRAVITY = 1.2
 PLAYER_MOVE_SPEED = 5.0
@@ -259,6 +259,10 @@ class Game(arcade.Window):
             for plat in plats:
                 if bomb.change_y < 0 and bomb.center_y >= plat.top:
                     bomb.bottom = plat.top
+                    bomb.change_y = -bomb.change_y * BOMB_BOUNCE
+                elif bomb.change_y > 0 and bomb.bottom <= plat.bottom:
+                    # Rising, hit underside of platform
+                    bomb.top = plat.bottom
                     bomb.change_y = -bomb.change_y * BOMB_BOUNCE
 
         # Bomb hit → game over
