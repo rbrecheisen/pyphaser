@@ -1,6 +1,6 @@
 [project]
 name = "pyphaser"
-version = "1.0.1"
+version = "1.0.2"
 description = ""
 authors = [
     {name = "Ralph Brecheisen", email = "ralph.brecheisen@gmail.com"}
