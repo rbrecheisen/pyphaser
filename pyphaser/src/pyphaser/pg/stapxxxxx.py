@@ -1,4 +1,4 @@
-from pyphaser.pg.handige_dingen import (
+from pyphaser.src.pyphaser.pg.handigefuncties import (
     welke_keyboard_toetsen_zijn_ingedrukt,
     wacht_een_paar_seconden,
 )

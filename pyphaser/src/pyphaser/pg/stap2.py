@@ -6,8 +6,8 @@ def wacht_even(seconden):
 
 
 def main():
-    door_gaan = 'JA'
-    while door_gaan == 'JA':
+    doorgaan = 'JA'
+    while doorgaan == 'JA':
         print('Dit is de eerste stap!')
         wacht_even(1)
 
