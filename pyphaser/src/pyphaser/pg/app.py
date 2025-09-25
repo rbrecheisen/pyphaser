@@ -27,14 +27,15 @@ background = pygame.image.load(str(ASSETS / "sky.png"))
 ground_img = pygame.image.load(str(ASSETS / "platform.png"))
 star_img = pygame.image.load(str(ASSETS / "star.png"))
 bomb_img = pygame.image.load(str(ASSETS / "bomb.png"))
-dude_img = pygame.image.load(str(ASSETS / "dude.png"))
-
-dude_frames = [dude_img.subsurface((32*i, 0, 32, 48)) for i in range(9)]
+# dude_img = pygame.image.load(str(ASSETS / "dude.png"))
+# dude_frames = [dude_img.subsurface((32*i, 0, 32, 48)) for i in range(9)]
 
 # Player class
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
+        dude_img = pygame.image.load(str(ASSETS / "dude.png"))
+        dude_frames = [dude_img.subsurface((32*i, 0, 32, 48)) for i in range(9)]
         # Take frame 4 (standing)
         self.frames_left = dude_frames[0:4]
         self.frame_idle = dude_frames[4]
@@ -52,19 +53,34 @@ class Player(pygame.sprite.Sprite):
         self.anim_speed = 0.15  # lower = slower
         self.facing = "idle"
 
+    def beweeg_naar_links(self, stappen=0):
+        # self.vel_x = -5
+        pass
+
+    def beweeg_naar_rechts(self, stappen=0):
+        # self.vel_x = 5
+        pass
+
+    def spring(self, hoe_hoog):
+        # self.vel_y = -15
+        pass
+
     def update(self, keys):
         self.vel_x = 0
         if keys[pygame.K_LEFT]:
-            self.vel_x = -5
+            # self.vel_x = -5
+            self.beweeg_naar_links()
             self.facing = 'left'
         elif keys[pygame.K_RIGHT]:
-            self.vel_x = 5
+            # self.vel_x = 5
+            self.beweeg_naar_links()
             self.facing = 'right'
         else:
             self.facing = 'idle'
 
         if (keys[pygame.K_UP] or keys[pygame.K_SPACE]) and self.on_ground:
             self.vel_y = -15
+            self.spring()
 
         # Apply gravity
         self.vel_y += 0.5
