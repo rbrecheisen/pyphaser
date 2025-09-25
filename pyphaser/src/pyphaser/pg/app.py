@@ -14,7 +14,7 @@ FPS = 60
 # Colors
 BLACK = (0, 0, 0)
 
-ASSETS = Path("/Users/ralph/dev/coding4kids/pyphaser/pyphaser/src/pyphaser/resources")
+ASSETS = Path("resources")
 
 # Setup screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -40,7 +40,6 @@ class Player(pygame.sprite.Sprite):
         self.frame_idle = dude_frames[4]
         self.frames_right = dude_frames[5:9]
         self.image = self.frame_idle
-        # self.image = dude_img.subsurface((32*4, 0, 32, 48))
         self.rect = self.image.get_rect()
         self.rect.center = (100, 450)
         self.vel_y = 0
@@ -154,124 +153,121 @@ class Bomb(pygame.sprite.Sprite):
             self.rect.top = 0
             self.vel_y *= -1
 
-# Groups
-all_sprites = pygame.sprite.Group()
-platforms = pygame.sprite.Group()
-stars = pygame.sprite.Group()
-bombs = pygame.sprite.Group()
-
-# Create player
-player = Player()
-all_sprites.add(player)
-
-# Create platforms
-ground = Platform(0, 568, 800, 32)
-platform_list = [
-    ground,
-    Platform(600, 400),
-    Platform(50, 250),
-    Platform(750, 220)
-]
-for p in platform_list:
-    all_sprites.add(p)
-    platforms.add(p)
-
-# Create stars
-for i in range(12):
-    star = Star(12 + i*70, 0)
-    all_sprites.add(star)
-    stars.add(star)
-
-# Score
-score = 0
-font = pygame.font.SysFont(None, 36)
-game_over = False
-
-# Main loop
-running = True
-while running:
-    clock.tick(FPS)
-    keys = pygame.key.get_pressed()
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-    if not game_over:
-        # Update
-        all_sprites.update(keys)
-
-        # Collision with platforms (player)
-        player.on_ground = False
-        hits = pygame.sprite.spritecollide(player, platforms, False)
-        # for platform in hits:
-        #     if player.vel_y > 0:
-        #         player.rect.bottom = platform.rect.top
-        #         player.vel_y = 0
-        #         player.on_ground = True
-        for platform in hits:
-            if player.vel_y > 0:  # falling
-                player.rect.bottom = platform.rect.top
-                player.vel_y = 0
-                player.on_ground = True
-            elif player.vel_y < 0:  # jumping up into platform
-                player.rect.top = platform.rect.bottom
-                player.vel_y = 0
-
-        # Collision with platforms (stars)
-        for star in stars:
-            if pygame.sprite.spritecollide(star, platforms, False):
-                star.vel_y = -star.vel_y * star.bounce
-
-        for bomb in bombs:
-            hits = pygame.sprite.spritecollide(bomb, platforms, False)
-            for platform in hits:
-                if bomb.vel_y > 0:  # falling
-                    bomb.rect.bottom = platform.rect.top
-                    bomb.vel_y = -bomb.vel_y * 0.9
-                elif bomb.vel_y < 0:  # hitting underside
-                    bomb.rect.top = platform.rect.bottom
-                    bomb.vel_y = -bomb.vel_y * 0.9
-
-        # Collect stars
-        star_hits = pygame.sprite.spritecollide(player, stars, True)
-        for star in star_hits:
-            score += 10
-
-        if len(stars) == 0:
-            # Respawn stars
-            for i in range(12):
-                star = Star(12 + i*70, 0)
-                all_sprites.add(star)
-                stars.add(star)
-
-            # Add bomb
-            x = random.randint(400, 800) if player.rect.x < 400 else random.randint(0, 400)
-            bomb = Bomb(x, 16)
-            all_sprites.add(bomb)
-            bombs.add(bomb)
-
-        # Hit bomb
-        if pygame.sprite.spritecollide(player, bombs, False):
-            game_over = True
-
-    # Draw
-    screen.blit(background, (0, 0))
-    all_sprites.draw(screen)
-
-    # Score text
-    score_text = font.render(f"Score: {score}", True, BLACK)
-    screen.blit(score_text, (16, 16))
-
-    # Game over text
-    if game_over:
-        over_text = font.render("GAME OVER", True, (255, 0, 0))
-        screen.blit(over_text, (WIDTH//2 - 80, HEIGHT//2))
-
-    pygame.display.flip()
-
-pygame.quit()
-sys.exit()
-
 def main():
-    pass
+    # Groups
+    all_sprites = pygame.sprite.Group()
+    platforms = pygame.sprite.Group()
+    stars = pygame.sprite.Group()
+    bombs = pygame.sprite.Group()
+
+    # Create player
+    player = Player()
+    all_sprites.add(player)
+
+    # Create platforms
+    ground = Platform(0, 568, 800, 32)
+    platform_list = [
+        ground,
+        Platform(600, 400),
+        Platform(50, 250),
+        Platform(750, 220)
+    ]
+    for p in platform_list:
+        all_sprites.add(p)
+        platforms.add(p)
+
+    # Create stars
+    for i in range(12):
+        star = Star(12 + i*70, 0)
+        all_sprites.add(star)
+        stars.add(star)
+
+    # Score
+    score = 0
+    font = pygame.font.SysFont(None, 36)
+    game_over = False
+
+    # Main loop
+    running = True
+    while running:
+        clock.tick(FPS)
+        keys = pygame.key.get_pressed()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        if not game_over:
+            # Update
+            all_sprites.update(keys)
+
+            # Collision with platforms (player)
+            player.on_ground = False
+            hits = pygame.sprite.spritecollide(player, platforms, False)
+            for platform in hits:
+                if player.vel_y > 0:  # falling
+                    player.rect.bottom = platform.rect.top
+                    player.vel_y = 0
+                    player.on_ground = True
+                elif player.vel_y < 0:  # jumping up into platform
+                    player.rect.top = platform.rect.bottom
+                    player.vel_y = 0
+
+            # Collision with platforms (stars)
+            for star in stars:
+                if pygame.sprite.spritecollide(star, platforms, False):
+                    star.vel_y = -star.vel_y * star.bounce
+
+            for bomb in bombs:
+                hits = pygame.sprite.spritecollide(bomb, platforms, False)
+                for platform in hits:
+                    if bomb.vel_y > 0:  # falling
+                        bomb.rect.bottom = platform.rect.top
+                        bomb.vel_y = -bomb.vel_y * 0.9
+                    elif bomb.vel_y < 0:  # hitting underside
+                        bomb.rect.top = platform.rect.bottom
+                        bomb.vel_y = -bomb.vel_y * 0.9
+
+            # Collect stars
+            star_hits = pygame.sprite.spritecollide(player, stars, True)
+            for star in star_hits:
+                score += 10
+
+            if len(stars) == 0:
+                # Respawn stars
+                for i in range(12):
+                    star = Star(12 + i*70, 0)
+                    all_sprites.add(star)
+                    stars.add(star)
+
+                # Add bomb
+                x = random.randint(400, 800) if player.rect.x < 400 else random.randint(0, 400)
+                bomb = Bomb(x, 16)
+                all_sprites.add(bomb)
+                bombs.add(bomb)
+
+            # Hit bomb
+            if pygame.sprite.spritecollide(player, bombs, False):
+                game_over = True
+
+        # Draw
+        screen.blit(background, (0, 0))
+        all_sprites.draw(screen)
+
+        # Score text
+        score_text = font.render(f"Score: {score}", True, BLACK)
+        screen.blit(score_text, (16, 16))
+
+        # Game over text
+        if game_over:
+            over_text = font.render("GAME OVER", True, (255, 0, 0))
+            screen.blit(over_text, (WIDTH//2 - 80, HEIGHT//2))
+
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
+
+
+if __name__ == '__main__':
+    main()

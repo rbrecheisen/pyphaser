@@ -18,6 +18,8 @@ packages = [{include = "pyphaser", from = "src"}]
 [tool.poetry.scripts]
 pyphaser-arcade = "pyphaser.arcade.app:main"
 pyphaser-pg = "pyphaser.pg.app:main"
+pyphaser-pg-compleet = "pyphaser.pg.compleet.app:main"
+pyphaser-pg-1 = "pyphaser.pg.app-stap1:main"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
