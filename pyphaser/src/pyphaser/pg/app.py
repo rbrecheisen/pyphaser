@@ -39,6 +39,7 @@ class Player(pygame.sprite.Sprite):
         # Take frame 4 (standing)
         self.frames_left = dude_frames[0:4]
         self.frame_idle = dude_frames[4]
+        pygame.image.save(self.frame_idle, str(ASSETS / "dude_front.png"))
         self.frames_right = dude_frames[5:9]
         self.image = self.frame_idle
         self.rect = self.image.get_rect()
